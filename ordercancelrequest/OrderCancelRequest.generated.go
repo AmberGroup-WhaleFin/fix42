@@ -1,8 +1,9 @@
 package ordercancelrequest
 
 import (
-	"github.com/shopspring/decimal"
 	"time"
+
+	"github.com/shopspring/decimal"
 
 	"github.com/quickfixgo/enum"
 	"github.com/quickfixgo/field"

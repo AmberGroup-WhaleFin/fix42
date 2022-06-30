@@ -34,7 +34,7 @@ func (m OrderStatusRequest) ToMessage() *quickfix.Message {
 }
 
 //New returns a OrderStatusRequest initialized with the required fields for OrderStatusRequest
-func New(clordid field.ClOrdIDField, symbol field.SymbolField, side field.SideField) (m OrderStatusRequest) {
+func New(clordid field.ClOrdIDField, ordcategory field.OrdCategoryField, symbol field.SymbolField, side field.SideField) (m OrderStatusRequest) {
 	m.Message = quickfix.NewMessage()
 	m.Header = fix42.NewHeader(&m.Message.Header)
 	m.Body = &m.Message.Body
@@ -182,6 +182,11 @@ func (m OrderStatusRequest) SetEncodedSecurityDescLen(v int) {
 //SetEncodedSecurityDesc sets EncodedSecurityDesc, Tag 351
 func (m OrderStatusRequest) SetEncodedSecurityDesc(v string) {
 	m.Set(field.NewEncodedSecurityDesc(v))
+}
+
+// SetOrdCategory sets OrdCategory, Tag 9000.
+func (m OrderStatusRequest) SetOrdCategory(v enum.OrdCategory) {
+	m.Set(field.NewOrdCategory(v))
 }
 
 //GetAccount gets Account, Tag 1
@@ -409,6 +414,15 @@ func (m OrderStatusRequest) GetEncodedSecurityDesc() (v string, err quickfix.Mes
 	return
 }
 
+// GetOrdCategory gets OrdCategory, Tag 9000.
+func (m OrderStatusRequest) GetOrdCategory() (v enum.OrdCategory, err quickfix.MessageRejectError) {
+	var f field.OrdCategoryField
+	if err = m.Get(&f); err == nil {
+		v = f.Value()
+	}
+	return
+}
+
 //HasAccount returns true if Account is present, Tag 1
 func (m OrderStatusRequest) HasAccount() bool {
 	return m.Has(tag.Account)
@@ -532,4 +546,9 @@ func (m OrderStatusRequest) HasEncodedSecurityDescLen() bool {
 //HasEncodedSecurityDesc returns true if EncodedSecurityDesc is present, Tag 351
 func (m OrderStatusRequest) HasEncodedSecurityDesc() bool {
 	return m.Has(tag.EncodedSecurityDesc)
+}
+
+// HasOrdCategory returns true if OrdCategory is present, Tag 9000.
+func (m OrderStatusRequest) HasOrdCategory() bool {
+	return m.Has(tag.OrdCategory)
 }

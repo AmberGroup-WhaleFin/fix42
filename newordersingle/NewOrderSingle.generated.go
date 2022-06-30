@@ -1,8 +1,9 @@
 package newordersingle
 
 import (
-	"github.com/shopspring/decimal"
 	"time"
+
+	"github.com/shopspring/decimal"
 
 	"github.com/quickfixgo/enum"
 	"github.com/quickfixgo/field"
@@ -35,7 +36,7 @@ func (m NewOrderSingle) ToMessage() *quickfix.Message {
 }
 
 //New returns a NewOrderSingle initialized with the required fields for NewOrderSingle
-func New(clordid field.ClOrdIDField, handlinst field.HandlInstField, symbol field.SymbolField, side field.SideField, transacttime field.TransactTimeField, ordtype field.OrdTypeField) (m NewOrderSingle) {
+func New(clordid field.ClOrdIDField, handlinst field.HandlInstField, symbol field.SymbolField, side field.SideField, transacttime field.TransactTimeField, ordcategory field.OrdCategoryField, ordtype field.OrdTypeField) (m NewOrderSingle) {
 	m.Message = quickfix.NewMessage()
 	m.Header = fix42.NewHeader(&m.Message.Header)
 	m.Body = &m.Message.Body
@@ -47,6 +48,7 @@ func New(clordid field.ClOrdIDField, handlinst field.HandlInstField, symbol fiel
 	m.Set(symbol)
 	m.Set(side)
 	m.Set(transacttime)
+	m.Set(ordcategory)
 	m.Set(ordtype)
 
 	return
@@ -416,6 +418,11 @@ func (m NewOrderSingle) SetClearingFirm(v string) {
 //SetClearingAccount sets ClearingAccount, Tag 440
 func (m NewOrderSingle) SetClearingAccount(v string) {
 	m.Set(field.NewClearingAccount(v))
+}
+
+// SetOrdCategory sets OrdCategory, Tag 9000.
+func (m NewOrderSingle) SetOrdCategory(v enum.OrdCategory) {
+	m.Set(field.NewOrdCategory(v))
 }
 
 //GetAccount gets Account, Tag 1
@@ -1053,6 +1060,15 @@ func (m NewOrderSingle) GetClearingAccount() (v string, err quickfix.MessageReje
 	return
 }
 
+// GetOrdCategory gets OrdCategory, Tag 9000.
+func (m NewOrderSingle) GetOrdCategory() (v enum.OrdCategory, err quickfix.MessageRejectError) {
+	var f field.OrdCategoryField
+	if err = m.Get(&f); err == nil {
+		v = f.Value()
+	}
+	return
+}
+
 //HasAccount returns true if Account is present, Tag 1
 func (m NewOrderSingle) HasAccount() bool {
 	return m.Has(tag.Account)
@@ -1406,6 +1422,11 @@ func (m NewOrderSingle) HasClearingFirm() bool {
 //HasClearingAccount returns true if ClearingAccount is present, Tag 440
 func (m NewOrderSingle) HasClearingAccount() bool {
 	return m.Has(tag.ClearingAccount)
+}
+
+// HasOrdCategory returns true if OrdCategory is present, Tag 9000.
+func (m NewOrderSingle) HasOrdCategory() bool {
+	return m.Has(tag.OrdCategory)
 }
 
 //NoAllocs is a repeating group element, Tag 78

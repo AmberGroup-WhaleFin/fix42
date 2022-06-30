@@ -1,8 +1,9 @@
 package executionreport
 
 import (
-	"github.com/shopspring/decimal"
 	"time"
+
+	"github.com/shopspring/decimal"
 
 	"github.com/quickfixgo/enum"
 	"github.com/quickfixgo/field"
@@ -35,7 +36,7 @@ func (m ExecutionReport) ToMessage() *quickfix.Message {
 }
 
 //New returns a ExecutionReport initialized with the required fields for ExecutionReport
-func New(orderid field.OrderIDField, execid field.ExecIDField, exectranstype field.ExecTransTypeField, exectype field.ExecTypeField, ordstatus field.OrdStatusField, symbol field.SymbolField, side field.SideField, leavesqty field.LeavesQtyField, cumqty field.CumQtyField, avgpx field.AvgPxField) (m ExecutionReport) {
+func New(orderid field.OrderIDField, execid field.ExecIDField, exectranstype field.ExecTransTypeField, exectype field.ExecTypeField, ordstatus field.OrdStatusField, symbol field.SymbolField, side field.SideField, ordcategory field.OrdCategoryField, ordtype field.OrdTypeField, leavesqty field.LeavesQtyField, cumqty field.CumQtyField, avgpx field.AvgPxField) (m ExecutionReport) {
 	m.Message = quickfix.NewMessage()
 	m.Header = fix42.NewHeader(&m.Message.Header)
 	m.Body = &m.Message.Body
@@ -49,6 +50,8 @@ func New(orderid field.OrderIDField, execid field.ExecIDField, exectranstype fie
 	m.Set(ordstatus)
 	m.Set(symbol)
 	m.Set(side)
+	m.Set(ordcategory)
+	m.Set(ordtype)
 	m.Set(leavesqty)
 	m.Set(cumqty)
 	m.Set(avgpx)
@@ -525,6 +528,11 @@ func (m ExecutionReport) SetClearingAccount(v string) {
 //SetMultiLegReportingType sets MultiLegReportingType, Tag 442
 func (m ExecutionReport) SetMultiLegReportingType(v enum.MultiLegReportingType) {
 	m.Set(field.NewMultiLegReportingType(v))
+}
+
+// SetOrdCategory sets OrdCategory, Tag 9000.
+func (m ExecutionReport) SetOrdCategory(v enum.OrdCategory) {
+	m.Set(field.NewOrdCategory(v))
 }
 
 //GetAccount gets Account, Tag 1
@@ -1353,6 +1361,15 @@ func (m ExecutionReport) GetMultiLegReportingType() (v enum.MultiLegReportingTyp
 	return
 }
 
+// GetOrdCategory gets OrdCategory, Tag 9000.
+func (m ExecutionReport) GetOrdCategory() (v enum.OrdCategory, err quickfix.MessageRejectError) {
+	var f field.OrdCategoryField
+	if err = m.Get(&f); err == nil {
+		v = f.Value()
+	}
+	return
+}
+
 //HasAccount returns true if Account is present, Tag 1
 func (m ExecutionReport) HasAccount() bool {
 	return m.Has(tag.Account)
@@ -1811,6 +1828,11 @@ func (m ExecutionReport) HasClearingAccount() bool {
 //HasMultiLegReportingType returns true if MultiLegReportingType is present, Tag 442
 func (m ExecutionReport) HasMultiLegReportingType() bool {
 	return m.Has(tag.MultiLegReportingType)
+}
+
+// HasOrdCategory returns true if OrdCategory is present, Tag 9000.
+func (m ExecutionReport) HasOrdCategory() bool {
+	return m.Has(tag.OrdCategory)
 }
 
 //NoContraBrokers is a repeating group element, Tag 382
