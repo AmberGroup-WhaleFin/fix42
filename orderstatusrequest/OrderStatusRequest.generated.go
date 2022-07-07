@@ -42,6 +42,7 @@ func New(clordid field.ClOrdIDField, ordcategory field.OrdCategoryField, symbol 
 
 	m.Header.Set(field.NewMsgType("H"))
 	m.Set(clordid)
+	m.Set(ordcategory)
 	m.Set(symbol)
 	m.Set(side)
 
