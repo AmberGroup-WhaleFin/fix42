@@ -36,7 +36,7 @@ func (m NewOrderSingle) ToMessage() *quickfix.Message {
 }
 
 //New returns a NewOrderSingle initialized with the required fields for NewOrderSingle
-func New(clordid field.ClOrdIDField, handlinst field.HandlInstField, symbol field.SymbolField, side field.SideField, transacttime field.TransactTimeField, ordcategory field.OrdCategoryField, ordtype field.OrdTypeField) (m NewOrderSingle) {
+func New(clordid field.ClOrdIDField, symbol field.SymbolField, side field.SideField, transacttime field.TransactTimeField, ordcategory field.OrdCategoryField, ordtype field.OrdTypeField) (m NewOrderSingle) {
 	m.Message = quickfix.NewMessage()
 	m.Header = fix42.NewHeader(&m.Message.Header)
 	m.Body = &m.Message.Body
@@ -44,7 +44,6 @@ func New(clordid field.ClOrdIDField, handlinst field.HandlInstField, symbol fiel
 
 	m.Header.Set(field.NewMsgType("D"))
 	m.Set(clordid)
-	m.Set(handlinst)
 	m.Set(symbol)
 	m.Set(side)
 	m.Set(transacttime)
@@ -93,11 +92,6 @@ func (m NewOrderSingle) SetCurrency(v string) {
 //SetExecInst sets ExecInst, Tag 18
 func (m NewOrderSingle) SetExecInst(v enum.ExecInst) {
 	m.Set(field.NewExecInst(v))
-}
-
-//SetHandlInst sets HandlInst, Tag 21
-func (m NewOrderSingle) SetHandlInst(v enum.HandlInst) {
-	m.Set(field.NewHandlInst(v))
 }
 
 //SetIDSource sets IDSource, Tag 22
@@ -473,15 +467,6 @@ func (m NewOrderSingle) GetCurrency() (v string, err quickfix.MessageRejectError
 //GetExecInst gets ExecInst, Tag 18
 func (m NewOrderSingle) GetExecInst() (v enum.ExecInst, err quickfix.MessageRejectError) {
 	var f field.ExecInstField
-	if err = m.Get(&f); err == nil {
-		v = f.Value()
-	}
-	return
-}
-
-//GetHandlInst gets HandlInst, Tag 21
-func (m NewOrderSingle) GetHandlInst() (v enum.HandlInst, err quickfix.MessageRejectError) {
-	var f field.HandlInstField
 	if err = m.Get(&f); err == nil {
 		v = f.Value()
 	}
@@ -1097,11 +1082,6 @@ func (m NewOrderSingle) HasCurrency() bool {
 //HasExecInst returns true if ExecInst is present, Tag 18
 func (m NewOrderSingle) HasExecInst() bool {
 	return m.Has(tag.ExecInst)
-}
-
-//HasHandlInst returns true if HandlInst is present, Tag 21
-func (m NewOrderSingle) HasHandlInst() bool {
-	return m.Has(tag.HandlInst)
 }
 
 //HasIDSource returns true if IDSource is present, Tag 22
